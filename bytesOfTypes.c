@@ -11,6 +11,10 @@ bytesOfTypes.c
 
 int main(int argc,char const* argv[])
 {
+	//sizeof 是C语言中的一个操作符 测量对象 类型，不是函数
+	//测量类型时需要加括号
+	//不同系统中的数据类型 长度不一样
+	//int类型与硬件最为切合 故int类型速度最快
 	/*三种基本的整型类型*/
 	// short 2字节 16位
 	printf("%8s:%lu bytes\n","short", sizeof(short));

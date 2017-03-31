@@ -11,4 +11,7 @@
 5. myGitLog.txt records my learning process of git command.  
 6. triangle.c prints an triangle on terminal used by a double nest function.  
 7. variableArguments.c shows the usage of variable arguments in C.
-
+8. format.c shows how print different formats of numbers as decimal(base 10),octal(base 8) and hexadecimal(base 16).  
+9. scanf.c shows the usage of scanf().  
+10. boo.c shows the bool type in C is _Bool.  
+11. string.c shows the usage of string.  
