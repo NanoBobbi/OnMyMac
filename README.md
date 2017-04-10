@@ -15,3 +15,4 @@
 9. **scanf.c** shows the usage of scanf().  
 10. **bool.c** shows the bool type in C is _Bool.  
 11. **string.c** shows the usage of string.  
+12. **argcAndArgv.c** shows the meaning of argc and argv arguments.

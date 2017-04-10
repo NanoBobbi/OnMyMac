@@ -32,6 +32,7 @@ void init(pArray array)
 	array->count = 0;
 }
 
+
 void append(pArray array,int count,...)
 {
 	va_list pointer;
@@ -56,10 +57,6 @@ void append(pArray array,int count,...)
 	array->count += count;
 }
 
-void removelast(pArray array)
-{
-	array->count -= 1;
-}
 
 void removeAtIndex(pArray array,int index)
 {
@@ -101,16 +98,12 @@ void insertAtIndex(pArray array,int index,int number)
 	array->count += 1;
 }
 
-void foreach(pArray array)
+
+/*returnInt functions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+int returnInt(pArray array,int *(*func)(pArray array))
 {
-	int *first,*last;
-	first = array->member;
-	last = array->member + (array->count - 1);
-	for (;first <= last; ++first)
-	{
-		printf("%d ", *first);
-	}
-	putchar('\n');
+	return *(*func)(array);
 }
 
 int *max(pArray array)
@@ -127,7 +120,7 @@ int *max(pArray array)
 	}
 	return pMax;
 }
-void min(pArray array)
+int *min(pArray array)
 {
 	int *pMin,*first,*last;
 	pMin = first = array->member;
@@ -139,8 +132,41 @@ void min(pArray array)
 			pMin = first;
 		}
 	}
-	printf("%d\n", *pMin);
+	return pMin;
 }
+
+int *sum(pArray array)
+{
+	int *first,*last,*pSum;
+	int sumValue = 0;
+	first = array->member;
+	last = array->member + (array->count -1);
+	for(;first <= last; ++first)
+	{
+		sumValue += *first;
+	}
+	pSum = &sumValue;
+	return pSum;
+}
+
+
+/*return double functions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+double returnDouble(pArray array,double *(*func)(pArray array))
+{
+	return *(*func)(array);
+	//由于该函数返回的是一个地址所以在double (*func)(pArray)前加一个星号，来取出该地址中的值
+}
+
+double *average(pArray array)
+{
+	double *ptr,temp;
+	// 需额外设置一个指针变量ptr来存储计算后的值，不能直接返回temp的地址，同在sum()函数中设置pSum指针一样。
+	temp = (double)returnInt(array,sum)/(array->count);
+	ptr = &temp;
+	return ptr;
+}
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void swap(int *a,int *b)
 {
@@ -163,6 +189,8 @@ void selectionSort(pArray array)
 			swap(last,pMax);
 		}
 		array->count -= 1;
+		// max()函数是根据array->count来确定数组的长度
+		// 所以每循环一次长度要减1.来缩小范围
 	}
 	array->count = count;
 }
@@ -182,6 +210,29 @@ void bubbleSort(pArray array)
 		}
 	}
 }
+
+void foreach(pArray array)
+{
+	int *first,*last;
+	first = array->member;
+	last = array->member + (array->count - 1);
+	for (;first <= last; ++first)
+	{
+		printf("%d ", *first);
+	}
+	putchar('\n');
+}
+
+void removelast(pArray array)
+{
+	array->count -= 1;
+}
+
+void operate(pArray array,void (*func)(pArray array))
+{
+	(*func)(array);
+}
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 _Bool contains(pArray array,int number)
 {
@@ -203,19 +254,19 @@ _Bool contains(pArray array,int number)
 int main(int argc ,char  *const argv[])
 {
 	Array array;
-	init(&array);
-	append(&array,6,1,2,3,4,6,5);
-	foreach(&array);
-	printf("count:%d,capacity:%d\n", array.count,array.capacity);
+	operate(&array,init);
 	append(&array,5,1,2,3,4,5);
-	foreach(&array);
 
-	insertAtIndex(&array,4,0);
-	foreach(&array);
-	printf("count:%d,capacity:%d\n", array.count,array.capacity);
-	bubbleSort(&array);
-	contains(&array,7);
-	printf("%d\n", *max(&array));
+	printf("%d\n", returnInt(&array,min));
+	printf("%d\n", returnInt(&array,max));
+	printf("%d\n", returnInt(&array,sum));
+	printf("%.2f\n", returnDouble(&array,average));
+
+	operate(&array,bubbleSort);
+	operate(&array,removelast);
+	operate(&array,selectionSort);
+	operate(&array,foreach);
+
 
 	return 0;
 }
